@@ -5,6 +5,8 @@ import com.notificacion.service.entity.NotificationResponse;
 import com.notificacion.service.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +20,10 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PostMapping("/email")
-    public ResponseEntity<NotificationResponse> sendEmail(@RequestBody NotificationRequest request) {
-        return ResponseEntity.ok(notificationService.sendEmail(request));
+    @MessageMapping("/send-message")
+    @SendTo("/")
+    public String sendMessage(String message) {
+        System.out.println("message: " + message);
+        return message;
     }
 }
